@@ -1,5 +1,6 @@
 import { AppShell } from '@mantine/core';
-import { ErrorBoundary, useMedplum, MedplumProvider } from '@medplum/react';
+import { ErrorBoundary, MedplumProvider, useMedplum } from '@medplum/react';
+import { MedplumClient } from '@medplum/core';
 import { Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 import { Router } from './Router';
@@ -9,12 +10,26 @@ import { Loading } from './components/Loading';
 import { RegisterPage } from './pages/RegisterPage';
 import { SignInPage } from './pages/SignInPage';
 import { LandingPage } from './pages/landing';
+import { MEDPLUM_SERVER_URL, MEDPLUM_PROJECT_ID } from './config';
 
-export function App(): JSX.Element | null {
+// Erstellen einer neuen MedplumClient-Instanz
+const medplumClient = new MedplumClient({
+  baseUrl: MEDPLUM_SERVER_URL,
+  clientId: MEDPLUM_PROJECT_ID,
+});
+
+export function App(): JSX.Element {
+  return (
+    <MedplumProvider medplum={medplumClient}>
+      <AppContent />
+    </MedplumProvider>
+  );
+}
+function AppContent(): JSX.Element | null {
   const medplum = useMedplum();
 
   if (medplum.isLoading()) {
-    return null;
+    return <Loading />;
   }
 
   if (!medplum.getProfile()) {
@@ -29,18 +44,16 @@ export function App(): JSX.Element | null {
   }
 
   return (
-    <MedplumProvider medplum={medplum}>
-      <AppShell header={{ height: 80 }}>
-        <Header />
-        <AppShell.Main>
-          <ErrorBoundary>
-            <Suspense fallback={<Loading />}>
-              <Router />
-            </Suspense>
-          </ErrorBoundary>
-        </AppShell.Main>
-        <Footer />
-      </AppShell>
-    </MedplumProvider>
+    <AppShell header={{ height: 80 }}>
+      <Header />
+      <AppShell.Main>
+        <ErrorBoundary>
+          <Suspense fallback={<Loading />}>
+            <Router />
+          </Suspense>
+        </ErrorBoundary>
+      </AppShell.Main>
+      <Footer />
+    </AppShell>
   );
 }
