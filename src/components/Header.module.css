@@ -17,13 +17,13 @@
 }
 
 .links {
-  @mixin smaller-than $mantine-breakpoint-sm {
+  @media (max-width: var(--mantine-breakpoint-sm)) {
     display: none;
   }
 }
 
 .burger {
-  @mixin larger-than $mantine-breakpoint-sm {
+  @media (min-width: var(--mantine-breakpoint-sm)) {
     display: none;
   }
 }
@@ -57,7 +57,7 @@
     background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-8));
   }
 
-  @mixin smaller-than $mantine-breakpoint-xs {
+  @media (max-width: var(--mantine-breakpoint-xs)) {
     display: none;
   }
 }
