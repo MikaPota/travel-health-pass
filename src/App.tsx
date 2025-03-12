@@ -25,6 +25,7 @@ export function App(): JSX.Element {
     </MedplumProvider>
   );
 }
+
 function AppContent(): JSX.Element | null {
   const medplum = useMedplum();
 
