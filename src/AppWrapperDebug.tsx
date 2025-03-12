@@ -2,7 +2,7 @@ import { MedplumClient } from '@medplum/core';
 import { MedplumProvider } from '@medplum/react';
 import { MEDPLUM_SERVER_URL, MEDPLUM_PROJECT_ID } from './config';
 import { useState, useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router'; // Geändert von react-router-dom zu react-router
 import { LandingPage } from './pages/landing';
 
 // Erstelle einen neuen MedplumClient
