@@ -1,5 +1,5 @@
 import { AppShell } from '@mantine/core';
-import { ErrorBoundary, useMedplum } from '@medplum/react';
+import { ErrorBoundary, useMedplum, MedplumProvider } from '@medplum/react';
 import { Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 import { Router } from './Router';
@@ -29,16 +29,22 @@ export function App(): JSX.Element | null {
   }
 
   return (
-    <AppShell header={{ height: 80 }}>
-      <Header />
-      <AppShell.Main>
-        <ErrorBoundary>
-          <Suspense fallback={<Loading />}>
-            <Router />
-          </Suspense>
-        </ErrorBoundary>
-      </AppShell.Main>
-      <Footer />
-    </AppShell>
+    <MedplumProvider
+      medplum={medplum}
+      recaptchaSiteKey=""
+      // andere Einstellungen...
+    >
+      <AppShell header={{ height: 80 }}>
+        <Header />
+        <AppShell.Main>
+          <ErrorBoundary>
+            <Suspense fallback={<Loading />}>
+              <Router />
+            </Suspense>
+          </ErrorBoundary>
+        </AppShell.Main>
+        <Footer />
+      </AppShell>
+    </MedplumProvider>
   );
 }
