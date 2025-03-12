@@ -29,11 +29,7 @@ export function App(): JSX.Element | null {
   }
 
   return (
-    <MedplumProvider
-      medplum={medplum}
-      recaptchaSiteKey=""
-      // andere Einstellungen...
-    >
+    <MedplumProvider medplum={medplum}>
       <AppShell header={{ height: 80 }}>
         <Header />
         <AppShell.Main>
