@@ -21,8 +21,7 @@ const medplum = new MedplumClient({
     console.log('Medplum: Nicht authentifiziert');
     // Keine Weiterleitung, um Debug-Modus zu ermöglichen
   },
-  // Debug-Logging aktivieren
-  debug: true
+  // Die debug-Eigenschaft entfernen, da sie nicht Teil von MedplumClientOptions ist
 });
 
 const theme = createTheme({
