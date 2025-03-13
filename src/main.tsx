@@ -5,20 +5,24 @@ import '@mantine/notifications/styles.css';
 import { MedplumClient } from '@medplum/core';
 import { MedplumProvider } from '@medplum/react';
 import '@medplum/react/styles.css';
-import { StrictMode } from 'react';
+import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
-import { App } from './App';
 import './styles/responsive.css';
 import './styles/header.css';
 import './styles/forms.css';
 import './styles/cards.css';
 import './styles/qrcode.css';
+import { AppWrapperDebug } from './AppWrapperDebug';
 
+// Erstelle einen neuen MedplumClient mit expliziten Optionen für besseres Debugging
 const medplum = new MedplumClient({
-  // To run my.healthpass.plus locally, you can set the baseURL in this constructor
-  // baseUrl: http://localhost:8103
-  onUnauthenticated: () => (window.location.href = '/'),
+  onUnauthenticated: () => {
+    console.log('Medplum: Nicht authentifiziert');
+    // Keine Weiterleitung, um Debug-Modus zu ermöglichen
+  },
+  // Debug-Logging aktivieren
+  debug: true
 });
 
 const theme = createTheme({
@@ -40,16 +44,32 @@ const theme = createTheme({
   },
 });
 
-const root = createRoot(document.getElementById('root') as HTMLElement);
+const container = document.getElementById('root');
+
+// Überprüfe, ob das Element existiert
+if (!container) {
+  throw new Error('Root element not found');
+}
+
+// Root erstellen und App rendern
+const root = createRoot(container);
+
+// Debug-Komponente mit vereinfachter Struktur verwenden
 root.render(
   <StrictMode>
     <BrowserRouter>
       <MedplumProvider medplum={medplum}>
         <MantineProvider theme={theme}>
           <Notifications />
-          <App />
+          <AppWrapperDebug />
         </MantineProvider>
       </MedplumProvider>
     </BrowserRouter>
   </StrictMode>
 );
+
+// Füge Debug-Info zur Konsole hinzu
+console.log('Debug-Modus aktiv', {
+  zeit: new Date().toISOString(),
+  environment: process.env.NODE_ENV
+});
